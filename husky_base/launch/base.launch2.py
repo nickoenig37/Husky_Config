@@ -47,30 +47,40 @@ def generate_launch_description():
                                                         'map_subscribe_transient_local': 'true'}.items())
 
     # Cartographer node
-    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    trailbot_cartographer_prefix = get_package_share_directory(package_name)
-    cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
-                                                  trailbot_cartographer_prefix, 'config'))
-    configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
-    resolution = LaunchConfiguration('resolution', default='0.05')
-    publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
+    # use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    # trailbot_cartographer_prefix = get_package_share_directory(package_name)
+    # cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
+    #                                               trailbot_cartographer_prefix, 'config'))
+    # configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
+    # resolution = LaunchConfiguration('resolution', default='0.05')
+    # publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
 
-    cartographer_node = Node(
-        package='cartographer_ros',
-        executable='cartographer_node',
-        name='cartographer_node',
-        output='screen',
-        parameters=[{'use_sim_time': use_sim_time}],
-        arguments=['-configuration_directory', cartographer_config_dir,
-                   '-configuration_basename', configuration_basename],
-        remappings=[('/husky_velocity_controller/odom', '/odom')],
-        # remappings=[('/husky_velocity_controller/odom', '/odom')]
+    # cartographer_node = Node(
+    #     package='cartographer_ros',
+    #     executable='cartographer_node',
+    #     name='cartographer_node',
+    #     output='screen',
+    #     parameters=[{'use_sim_time': use_sim_time}],
+    #     arguments=['-configuration_directory', cartographer_config_dir,
+    #                '-configuration_basename', configuration_basename],
+    #     remappings=[('/husky_velocity_controller/odom', '/odom')],
+    #     # remappings=[('/husky_velocity_controller/odom', '/odom')]
+    # )
+
+    # occupancy_grid = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([os.path.join(get_package_share_directory(package_name), 'launch', 'occupancy_grid.launch.py')]),
+    #     launch_arguments={'resolution':resolution,
+    #                       'publish_period_sec': publish_period_sec}.items(),)
+
+    slam_node = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join('/opt/ros/humble/share/nav2_bringup/launch', 'slam_launch.py')),
+            # condition=IfCondition(slam),
+            launch_arguments={'namespace': namespace,
+                              'use_sim_time': use_sim_time,
+                              'autostart': autostart,
+                              'use_respawn': use_respawn,
+                              'params_file': params_file}.items()
     )
-
-    occupancy_grid = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(get_package_share_directory(package_name), 'launch', 'occupancy_grid.launch.py')]),
-        launch_arguments={'resolution':resolution,
-                          'publish_period_sec': publish_period_sec}.items(),)
 
     config_husky_velocity_controller = PathJoinSubstitution(
         [FindPackageShare("husky_control"),
@@ -148,7 +158,8 @@ def generate_launch_description():
     ld.add_action(launch_husky_teleop_base)
     ld.add_action(launch_husky_teleop_joy)
     ld.add_action(launch_husky_accessories)
-    ld.add_action(cartographer_node)
-    ld.add_action(nav_node)
+    ld.add_action(slam_node)
+    # ld.add_action(cartographer_node)
+    # ld.add_action(nav_node)
 
     return ld
