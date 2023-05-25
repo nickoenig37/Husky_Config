@@ -46,6 +46,17 @@ def generate_launch_description():
                                                         'use_lifecycle_mgr': 'false',
                                                         'map_subscribe_transient_local': 'true'}.items())
 
+
+    pc2scan_node = Node(
+        package = 'pointcloud_to_laserscan',
+        executable = 'pointcloud_to_laserscan_node',
+        output = 'screen',
+        respawn = use_respawn,
+        respawn_delay = 2.0,
+        remappings=[('/velodyne_points', '/cloud_in')],
+
+    )
+
     # Cartographer node
     # use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     # trailbot_cartographer_prefix = get_package_share_directory(package_name)
@@ -159,6 +170,7 @@ def generate_launch_description():
     ld.add_action(launch_husky_teleop_joy)
     ld.add_action(launch_husky_accessories)
     ld.add_action(slam_node)
+    ld.add_action(pc2scan_node)
     # ld.add_action(cartographer_node)
     # ld.add_action(nav_node)
 
