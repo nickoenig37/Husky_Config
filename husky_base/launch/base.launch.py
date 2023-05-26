@@ -51,7 +51,7 @@ def generate_launch_description():
     trailbot_cartographer_prefix = get_package_share_directory(package_name)
     cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
                                                   trailbot_cartographer_prefix, 'config'))
-    configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
+    configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_3d.lua') 
     resolution = LaunchConfiguration('resolution', default='0.05')
     publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
 
@@ -63,8 +63,8 @@ def generate_launch_description():
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=['-configuration_directory', cartographer_config_dir,
                    '-configuration_basename', configuration_basename],
-        remappings=[('/husky_velocity_controller/odom', '/odom')],
-        # remappings=[('/husky_velocity_controller/odom', '/odom')]
+        remappings=[('/husky_velocity_controller/odom', '/odom'),
+                    ('')],
     )
 
     occupancy_grid = IncludeLaunchDescription(
