@@ -26,11 +26,7 @@
       <plugin filename="libgazebo_ros_imu_sensor.so" name="$(arg prefix)imu_plugin">
           <ros>
             <namespace>$(arg prefix)</namespace>
-<<<<<<< HEAD
             <remapping>~/out:=imu/data_raw</remapping>
-=======
-            <remapping>~/out:=imu</remapping>
->>>>>>> 1de12dcc7611610af33a9980a28a8997852682e2
           </ros>
           <initial_orientation_as_reference>false</initial_orientation_as_reference>
         </plugin>
