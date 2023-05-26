@@ -90,6 +90,7 @@
       <child link="${prefix}inertial_link" />
     </joint>
 
+<<<<<<< HEAD
     <link name="${prefix}velodyne">
       <inertial>
         <mass value="46.034" />
@@ -104,6 +105,8 @@
       <child link="${prefix}velodyne" />
     </joint>
 
+=======
+>>>>>>> 1de12dcc7611610af33a9980a28a8997852682e2
     <!-- IMU Link-->
     <!-- Can be modified with environment variables in /etc/ros/setup.bash -->
     <link name="${prefix}imu_link"/>
