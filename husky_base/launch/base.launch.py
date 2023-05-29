@@ -35,7 +35,7 @@ def generate_launch_description():
 
     # Nav node
     nav_launch_path = os.path.join(get_package_share_directory(package_name),'launch','navigation_launch.py')
-    nav_params_path = os.path.join(get_package_share_directory(package_name),'config','nav2_params.yaml')
+    nav_params_path = os.path.join(get_package_share_directory(package_name),'config','nav2_params_points.yaml')
     point_params_path = os.path.join(get_package_share_directory(package_name),'config','follow_point.xml')
     nav_node = IncludeLaunchDescription(PythonLaunchDescriptionSource([nav_launch_path]),
                                         launch_arguments={'namespace': '',
@@ -46,11 +46,33 @@ def generate_launch_description():
                                                         'use_lifecycle_mgr': 'false',
                                                         'map_subscribe_transient_local': 'true'}.items())
 
+
+    #velodyne launch
+    velo_launch_path1 = os.path.join(get_package_share_directory('velodyne_driver'),'launch','velodyne_driver_node-VLP16-launch.py')
+    velo_launch1 = IncludeLaunchDescription(PythonLaunchDescriptionSource([velo_launch_path1]))
+    velo_launch_path2 = os.path.join(get_package_share_directory('velodyne_pointcloud'),'launch','velodyne_convert_node-VLP16-launch.py')
+    velo_launch2 = IncludeLaunchDescription(PythonLaunchDescriptionSource([velo_launch_path2]))
+
+    #PC2LSCAN
+    PCL2SCAN_launch_path = os.path.join(get_package_share_directory('velodyne_laserscan'),'launch','velodyne_laserscan_node-launch.py')
+    PCL2SCAN = IncludeLaunchDescription(PythonLaunchDescriptionSource([PCL2SCAN_launch_path]))
+
+    #rviz launch
+    rviz_config_path = os.path.join(get_package_share_directory(package_name),'config','rviz_config.rviz')
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        arguments=['-d', rviz_config_path],
+        output='screen')
+
+
     # Cartographer node
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     trailbot_cartographer_prefix = get_package_share_directory(package_name)
     cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
                                                   trailbot_cartographer_prefix, 'config'))
+    configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
     configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
     resolution = LaunchConfiguration('resolution', default='0.05')
     publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
@@ -150,5 +172,10 @@ def generate_launch_description():
     ld.add_action(launch_husky_accessories)
     ld.add_action(cartographer_node)
     ld.add_action(nav_node)
+    ld.add_action(velo_launch1)
+    ld.add_action(velo_launch2)
+    ld.add_action(occupancy_grid)
+    ld.add_action(rviz_node)
+    ld.add_action(PCL2SCAN)
 
     return ld

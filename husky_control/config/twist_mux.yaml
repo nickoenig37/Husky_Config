@@ -13,10 +13,10 @@ twist_mux:
         topic   : twist_marker_server/cmd_vel
         timeout : 0.5
         priority: 8
-      external:
-        topic   : cmd_vel
-        timeout : 0.5
-        priority: 1
+      # external:
+      #   topic   : cmd_vel
+      #   timeout : 0.5
+      #   priority: 1
     locks:
       e_stop:
         topic   : e_stop
