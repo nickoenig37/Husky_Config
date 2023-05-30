@@ -149,6 +149,10 @@ def generate_launch_description():
         
     )
 
+    #AVT Map launch 
+    avt_launch_path = os.path.join(get_package_share_directory(package_name),'launch','avt_map_launch.py')
+    avt_builder = IncludeLaunchDescription(PythonLaunchDescriptionSource([avt_launch_path]))
+
     # Launch husky_control/control.launch.py which is just robot_localization.
     launch_husky_control = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(PathJoinSubstitution(
@@ -185,5 +189,6 @@ def generate_launch_description():
     # ld.add_action(pc2scan_node)
     # ld.add_action(cartographer_node)
     ld.add_action(nav_node)
+    ld.add_action(avt_builder)
 
     return ld
