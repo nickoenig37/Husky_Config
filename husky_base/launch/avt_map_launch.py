@@ -99,12 +99,3 @@ def generate_launch_description():
     ])
 
     return launch_description
-
-# auto n = avt_341::node::init_node(argc, argv, "avt_341_perception_node");
-# 	// auto pc_sub = n->create_subscription<avt_341::msg::PointCloud2>("avt_341/points",2,PointCloudCallback);
-# 	auto pc_sub = n->create_subscription<avt_341::msg::PointCloud2>("scan",2,PointCloudCallback);
-#     // auto odom_sub = n->create_subscription<avt_341::msg::Odometry>("avt_341/odometry",10, OdometryCallback);
-# 	auto odom_sub = n->create_subscription<avt_341::msg::Odometry>("diff_cont/odom",10, OdometryCallback);
-#     auto grid_pub = n->create_publisher<avt_341::msg::OccupancyGrid>("avt_341/occupancy_grid", 1);
-#     auto grid_segmentation_pub = n->create_publisher<avt_341::msg::OccupancyGrid>("avt_341/segmentation_grid", 1);
-# https://github.com/CGoodin/nature-stack/tree/ros2
