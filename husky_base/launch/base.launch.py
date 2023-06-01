@@ -55,7 +55,7 @@ def generate_launch_description():
 
 
     #rviz launch
-    rviz_config_path = os.path.join(get_package_share_directory(package_name),'config','rviz_config.rviz')
+    rviz_config_path = os.path.join(get_package_share_directory(package_name),'config','base_config.rviz')
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -174,7 +174,7 @@ def generate_launch_description():
     ld.add_action(launch_husky_teleop_joy)
     ld.add_action(launch_husky_accessories)
     # ld.add_action(cartographer_node)
-    ld.add_action(nav_node)
+    #ld.add_action(nav_node)
     ld.add_action(velo_launch1)
     ld.add_action(velo_launch2)
     # ld.add_action(occupancy_grid)
