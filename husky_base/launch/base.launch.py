@@ -35,14 +35,14 @@ def generate_launch_description():
 
     # Nav node
     nav_launch_path = os.path.join(get_package_share_directory(package_name),'launch','navigation_launch.py')
-    nav_params_path = os.path.join(get_package_share_directory(package_name),'config','nav2_params.yaml')
-    #tree_params_path = os.path.join(get_package_share_directory(package_name),'config','navigate_w_replanning_and_recovery.xml')
+    nav_params_path = os.path.join(get_package_share_directory(package_name),'config','nav2_params_points.yaml')
+    point_params_path = os.path.join(get_package_share_directory(package_name),'config','follow_point.xml')
     nav_node = IncludeLaunchDescription(PythonLaunchDescriptionSource([nav_launch_path]),
                                         launch_arguments={'namespace': '',
                                                         'use_sim_time': 'true',
                                                         'autostart': 'true',
                                                         'params_file': nav_params_path,
-                                                        #'default_bt_xml_filename': tree_params_path,
+                                                        'default_bt_xml_filename': point_params_path,
                                                         'use_lifecycle_mgr': 'false',
                                                         'map_subscribe_transient_local': 'true'}.items())
 
@@ -73,6 +73,7 @@ def generate_launch_description():
     cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
                                                   trailbot_cartographer_prefix, 'config'))
     configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
+    configuration_basename = LaunchConfiguration('configuration_basename', default='trailbot_lds_2d.lua') 
     resolution = LaunchConfiguration('resolution', default='0.05')
     publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
 
@@ -85,8 +86,7 @@ def generate_launch_description():
         arguments=['-configuration_directory', cartographer_config_dir,
                    '-configuration_basename', configuration_basename],
         remappings=[('/husky_velocity_controller/odom', '/odom'),
-                    #('')
-                    ],
+                    ('/points2', '/velodyne_points')],
     )
 
     occupancy_grid = IncludeLaunchDescription(
